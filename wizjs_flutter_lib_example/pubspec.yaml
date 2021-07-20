@@ -17,9 +17,14 @@ dependencies:
   wizjs_flutter_lib:
     path: ../
 
+  # webview插件
   webview_flutter: ">=2.0.0 <3.0.0"
   # 设备信息
   device_info_plus: ">=2.0.0 <3.0.0"
+  # 版本信息
+  package_info_plus: ">=1.0.0 <2.0.0"
+  # 权限请求
+  permission_handler: ">=8.0.0 <9.0.0"
 
 dev_dependencies:
   flutter_test:

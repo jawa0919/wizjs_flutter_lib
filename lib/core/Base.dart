@@ -9,6 +9,8 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Base {
   /// test
@@ -18,38 +20,38 @@ class Base {
 
   /// env
   static Future env() async {
-    return "dsad/dasd";
+    return "env";
   }
 
   /// getSystemInfo
   static Future getSystemInfo(BuildContext context) async {
+    final info = await PackageInfo.fromPlatform();
+    final ori = MediaQuery.of(context).orientation.toString().split(".").last;
     if (Platform.isAndroid) {
       final build = await DeviceInfoPlugin().androidInfo;
       return {
         "brand": build.brand,
         "model": build.model,
-        "pixelRatio": "test",
-        "screenWidth": "test",
-        "screenHeight": "test",
-        "statusBarHeight": "test",
-        "version": "test",
+        "version": info.version,
         "system": build.version.sdkInt,
         "platform": "Android",
-        "deviceOrientation": "test"
+        "cameraAuthorized": await Permission.camera.isGranted,
+        "locationAuthorized": await Permission.location.isGranted,
+        "microphoneAuthorized": await Permission.camera.isGranted,
+        "deviceOrientation": ori
       };
     } else if (Platform.isIOS) {
-      final data = await DeviceInfoPlugin().iosInfo;
+      final build = await DeviceInfoPlugin().iosInfo;
       return {
-        "brand": data.systemName,
-        "model": data.model,
-        "pixelRatio": "test",
-        "screenWidth": "test",
-        "screenHeight": "test",
-        "statusBarHeight": "test",
-        "version": "test",
-        "system": data.utsname.version,
+        "brand": build.systemName,
+        "model": build.model,
+        "version": info.version,
+        "system": build.utsname.version,
         "platform": "IOS",
-        "deviceOrientation": "test"
+        "cameraAuthorized": await Permission.camera.isGranted,
+        "locationAuthorized": await Permission.location.isGranted,
+        "microphoneAuthorized": await Permission.microphone.isGranted,
+        "deviceOrientation": ori
       };
     } else {
       throw UnsupportedError("other Platform");
