@@ -7,7 +7,13 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'core/Base.dart';
+import 'core/WizJStorage.dart';
+import 'core/WizJsBase.dart';
+import 'core/WizJsRoute.dart';
+import 'core/WizJsNavigate.dart';
+import 'core/WizJsShare.dart';
+import 'core/WizJsUi.dart';
+import 'core/WizJsNetwork.dart';
 
 /// A Calculator.
 class Calculator {
@@ -25,11 +31,15 @@ class WizSdk {
   final Completer<WebViewController> ctrl;
 
   final JSCallback? userTokenCallback;
+  final JSCallback? stopPullDownRefreshCallback;
+  final JSCallback? startPullDownRefreshCallback;
 
   WizSdk(
     this.context,
     this.ctrl, {
     this.userTokenCallback,
+    this.stopPullDownRefreshCallback,
+    this.startPullDownRefreshCallback,
   });
 
   JavascriptChannel channel() {
@@ -51,14 +61,74 @@ class WizSdk {
     Future.value(api).then((value) {
       switch (api) {
         case "test":
-          return Base.test();
+          return WizJsBase.test();
         case "env":
-          return Base.env();
+          return WizJsBase.env();
         case "getSystemInfo":
-          return Base.getSystemInfo(context);
+          return WizJsBase.getSystemInfo(context);
+
+        case "reLaunch":
+          return WizJsRoute.reLaunch(context, req["url"]);
+        case "redirectTo":
+          return WizJsRoute.redirectTo(context, req["url"]);
+        case "navigateTo":
+          return WizJsRoute.navigatorTo(context, req["url"]);
+
+        case "stopPullDownRefresh":
+          if (this.stopPullDownRefreshCallback == null)
+            throw UnsupportedError("stopPullDownRefreshCallback");
+          return this.stopPullDownRefreshCallback?.call(context, {});
+        case "startPullDownRefresh":
+          if (this.stopPullDownRefreshCallback == null)
+            throw UnsupportedError("stopPullDownRefreshCallback");
+          return this.startPullDownRefreshCallback?.call(context, {});
+
+        /// WizJsNetwork
+        case "request":
+          return WizJsNetwork.request(context, req);
+        case "downloadFile":
+          return WizJsNetwork.downloadFile(context, req,
+              onReceiveProgress: (count, total) async {
+            log("downloadFile Progress: count-$count total-$total");
+            final progress = count * 100 ~/ total;
+            final v = {
+              "progress": progress,
+              "totalBytesWritten": count,
+              "totalBytesExpectedToWrite": total
+            };
+            String codeStr = jsonEncode(v);
+            String evalCode = "$CHANNEL_NAME.$api$id.${func.first}($codeStr)";
+            await (await ctrl.future).evaluateJavascript(evalCode);
+          });
+        case "uploadFile":
+          return WizJsNetwork.uploadFile(context, req,
+              onSendProgress: (count, total) async {
+            log("uploadFile Progress: count-$count total-$total");
+            final progress = count * 100 ~/ total;
+            final v = {
+              "progress": progress,
+              "totalBytesWritten": count,
+              "totalBytesExpectedToWrite": total
+            };
+            String codeStr = jsonEncode(v);
+            String evalCode = "$CHANNEL_NAME.$api$id.${func.first}($codeStr)";
+            await (await ctrl.future).evaluateJavascript(evalCode);
+          });
+
+        /// WizJsStorage
+        case "setStorage":
+          return WizJsStorage.setStorage(req);
+        case "removeStorage":
+          return WizJsStorage.removeStorage(req);
+        case "getStorage":
+          return WizJsStorage.getStorage(req);
+        case "getStorageInfo":
+          return WizJsStorage.getStorageInfo();
+        case "clearStorage":
+          return WizJsStorage.clearStorage();
 
         default:
-          return Future.error("Todo $api");
+          throw UnsupportedError("$api");
       }
     }).then((value) async {
       log("then: $value");
@@ -67,7 +137,7 @@ class WizSdk {
       await (await ctrl.future).evaluateJavascript(evalCode);
     }).catchError((error) async {
       log("error: $error");
-      String codeStr = jsonEncode(error);
+      String codeStr = jsonEncode("$error");
       String evalCode = "$CHANNEL_NAME.$api$id.reject($codeStr)";
       await (await ctrl.future).evaluateJavascript(evalCode);
     });

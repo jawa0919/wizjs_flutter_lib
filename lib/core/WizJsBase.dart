@@ -1,5 +1,5 @@
 /*
- * @FilePath     : /wizjs_flutter_lib/lib/core/Base.dart
+ * @FilePath     : /wizjs_flutter_lib/lib/core/WizJsBase.dart
  * @Date         : 2021-07-20 14:35:37
  * @Author       : wangjia <jawa0919@163.com>
  * @Description  : Base
@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class Base {
+class WizJsBase {
   /// test
   static Future test() async {
     return "test";

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'H5Page.dart';
+import 'StoragePage.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         "/": (context) => MyHomePage(),
         "/H5": (context) => H5Page(),
-        // "/Storage": (context) => StoragePage(),
+        "/Storage": (context) => StoragePage(),
         // "/explore": (context) => ExplorePage(),
         // "/demo/issues": (context) => IssuesPage(),
         // "/my": (context) => MyPage(),
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         return MaterialPageRoute(builder: (context) {
           return Scaffold(
             appBar: AppBar(title: Text(settings.name ?? "")),
-            body: Center(child: Text("Page not found")),
+            body: Center(child: Text("Page not found \n${settings.arguments}")),
           );
         });
       },
