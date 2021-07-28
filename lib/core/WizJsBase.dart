@@ -1,8 +1,8 @@
 /*
  * @FilePath     : /wizjs_flutter_lib/lib/core/WizJsBase.dart
  * @Date         : 2021-07-20 14:35:37
- * @Author       : wangjia <jawa0919@163.com>
- * @Description  : Base
+ * @Author       : jawa0919 <jawa0919@163.com>
+ * @Description  : 基础
  */
 
 import 'dart:io';

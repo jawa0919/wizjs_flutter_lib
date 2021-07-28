@@ -1,8 +1,8 @@
 /*
  * @FilePath     : /wizjs_flutter_lib/wizjs_flutter_lib_example/lib/H5Page.dart
  * @Date         : 2021-07-20 10:21:22
- * @Author       : wangjia <jawa0919@163.com>
- * @Description  : h5
+ * @Author       : jawa0919 <jawa0919@163.com>
+ * @Description  : H5Page
  */
 
 import 'dart:async';
@@ -64,38 +64,40 @@ class _H5PageState extends State<H5Page> {
         return Stack(
           alignment: Alignment.center,
           children: [
-            WebView(
-              key: widget.key,
-              onWebViewCreated: (WebViewController controller) {
-                log('---------------onWebViewCreated: ');
-                _onWebViewCreated(context, controller);
-              },
-              initialUrl: widget.url,
-              javascriptMode: JavascriptMode.unrestricted,
-              javascriptChannels: _initJsChannels(context),
-              navigationDelegate: (NavigationRequest request) {
-                log('---------------navigationDelegate: $request');
-                return NavigationDecision.navigate;
-              },
-              onPageStarted: (String url) {
-                log('---------------onPageStarted: $url');
-              },
-              onPageFinished: (String url) {
-                log('---------------onPageFinished: $url');
-                Future.delayed(Duration(milliseconds: 100), () {
-                  _isLoading = false;
-                  setState(() {});
-                });
-              },
-              onProgress: (int progress) {
-                log('---------------onProgress: $progress');
-              },
-              onWebResourceError: (error) {
-                log('---------------onWebResourceError: ${error.description}');
-              },
-              gestureNavigationEnabled: true,
-              userAgent: _userAgent,
-              allowsInlineMediaPlayback: true,
+            SafeArea(
+              child: WebView(
+                key: widget.key,
+                onWebViewCreated: (WebViewController controller) {
+                  log('---------------onWebViewCreated: ');
+                  _onWebViewCreated(context, controller);
+                },
+                initialUrl: widget.url,
+                javascriptMode: JavascriptMode.unrestricted,
+                javascriptChannels: _initJsChannels(context),
+                navigationDelegate: (NavigationRequest request) {
+                  log('---------------navigationDelegate: $request');
+                  return NavigationDecision.navigate;
+                },
+                onPageStarted: (String url) {
+                  log('---------------onPageStarted: $url');
+                },
+                onPageFinished: (String url) {
+                  log('---------------onPageFinished: $url');
+                  Future.delayed(Duration(milliseconds: 100), () {
+                    _isLoading = false;
+                    setState(() {});
+                  });
+                },
+                onProgress: (int progress) {
+                  log('---------------onProgress: $progress');
+                },
+                onWebResourceError: (error) {
+                  log('---------------onWebResourceError: ${error.description}');
+                },
+                gestureNavigationEnabled: true,
+                userAgent: _userAgent,
+                allowsInlineMediaPlayback: true,
+              ),
             ),
             if (_isLoading)
               Scaffold(body: Center(child: CircularProgressIndicator())),

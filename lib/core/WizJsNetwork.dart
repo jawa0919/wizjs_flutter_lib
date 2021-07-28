@@ -1,11 +1,9 @@
 /*
  * @FilePath     : /wizjs_flutter_lib/lib/core/WizJsNetwork.dart
- * @Date         : 2021-07-22 10:41:34
- * @Author       : wangjia <jawa0919@163.com>
+ * @Date         : 2021-07-22 14:18:40
+ * @Author       : jawa0919 <jawa0919@163.com>
  * @Description  : 网络
  */
-
-import 'dart:io';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
@@ -13,6 +11,7 @@ import 'package:dio_log/dio_log.dart';
 import 'package:flutter/material.dart';
 
 class WizJsNetwork {
+  /// 创建dio
   static Dio _createDio({int? timeout}) {
     Dio dio = Dio();
     dio.options.connectTimeout = timeout ?? 3 * 1000;
@@ -40,7 +39,7 @@ class WizJsNetwork {
     return {
       "data": response.data,
       "statusCode": response.statusCode,
-      "header": response.headers,
+      "header": response.headers.map,
     };
   }
 

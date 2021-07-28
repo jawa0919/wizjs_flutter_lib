@@ -7,13 +7,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'core/WizJStorage.dart';
 import 'core/WizJsBase.dart';
 import 'core/WizJsRoute.dart';
 import 'core/WizJsNavigate.dart';
 import 'core/WizJsShare.dart';
 import 'core/WizJsUi.dart';
 import 'core/WizJsNetwork.dart';
+import 'core/WizJsStorage.dart';
+import 'core/WizJsMedia.dart';
 
 /// A Calculator.
 class Calculator {
@@ -60,6 +61,8 @@ class WizSdk {
     List<String> func = msg["func"].cast<String>();
     Future.value(api).then((value) {
       switch (api) {
+
+        /// WizJsBase
         case "test":
           return WizJsBase.test();
         case "env":
@@ -67,6 +70,7 @@ class WizSdk {
         case "getSystemInfo":
           return WizJsBase.getSystemInfo(context);
 
+        /// WizJsRoute
         case "reLaunch":
           return WizJsRoute.reLaunch(context, req["url"]);
         case "redirectTo":
@@ -74,13 +78,18 @@ class WizSdk {
         case "navigateTo":
           return WizJsRoute.navigatorTo(context, req["url"]);
 
+        /// WizJsNavigate
+
+        /// WizJsShare
+
+        /// WizJsUi
         case "stopPullDownRefresh":
           if (this.stopPullDownRefreshCallback == null)
             throw UnsupportedError("stopPullDownRefreshCallback");
           return this.stopPullDownRefreshCallback?.call(context, {});
         case "startPullDownRefresh":
           if (this.stopPullDownRefreshCallback == null)
-            throw UnsupportedError("stopPullDownRefreshCallback");
+            throw UnsupportedError("startPullDownRefresh");
           return this.startPullDownRefreshCallback?.call(context, {});
 
         /// WizJsNetwork
@@ -127,6 +136,19 @@ class WizSdk {
         case "clearStorage":
           return WizJsStorage.clearStorage();
 
+        /// WizJsMedia
+        case "saveImageToPhotosAlbum":
+          return WizJsMedia.saveImageToPhotosAlbum(req);
+
+        ///
+        ///
+        ///
+        ///
+        ///
+        ///
+        ///
+        ///
+        ///
         default:
           throw UnsupportedError("$api");
       }
