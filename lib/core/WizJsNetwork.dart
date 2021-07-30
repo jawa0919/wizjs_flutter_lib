@@ -39,7 +39,7 @@ class WizJsNetwork {
     return {
       "data": response.data,
       "statusCode": response.statusCode,
-      "header": response.headers.map,
+      "header": response.headers.map.map((k, v) => MapEntry(k, v.first)),
     };
   }
 
@@ -60,7 +60,7 @@ class WizJsNetwork {
     return {
       "data": response.data,
       "statusCode": response.statusCode,
-      "header": response.headers,
+      "header": response.headers.map.map((k, v) => MapEntry(k, v.first)),
     };
   }
 
@@ -88,7 +88,7 @@ class WizJsNetwork {
     return {
       "data": response.data,
       "statusCode": response.statusCode,
-      "header": response.headers,
+      "header": response.headers.map.map((k, v) => MapEntry(k, v.first)),
     };
   }
 }
