@@ -139,16 +139,24 @@ class WizSdk {
         /// WizJsMedia
         case "saveImageToPhotosAlbum":
           return WizJsMedia.saveImageToPhotosAlbum(req);
+        case "getImageInfo":
+          return WizJsMedia.getImageInfo(req);
+        case "compressImage":
+          return WizJsMedia.compressImage(req);
+        case "chooseImage":
+          return WizJsMedia.chooseImage(req);
+
+        case "saveVideoToPhotosAlbum":
+          return WizJsMedia.saveVideoToPhotosAlbum(req);
+        case "getVideoInfo":
+          return WizJsMedia.getVideoInfo(req);
+        case "compressVideo":
+          return WizJsMedia.compressVideo(req);
+        case "chooseVideo":
+          return WizJsMedia.chooseVideo(req);
 
         ///
-        ///
-        ///
-        ///
-        ///
-        ///
-        ///
-        ///
-        ///
+
         default:
           throw UnsupportedError("$api");
       }

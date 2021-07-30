@@ -32,6 +32,16 @@ dependencies:
   dio_log: ">=2.0.0 <3.0.0"
   # 数据存储
   shared_preferences: ">=2.0.0 <3.0.0"
+  # 文件路径
+  path_provider: ">=2.0.0 <3.0.0"
+  # 媒体保存
+  image_gallery_saver: ">=1.0.0 <2.0.0"
+  # 图片压缩
+  flutter_image_compress: ">=1.0.0 <2.0.0"
+  # 媒体选择
+  image_picker: ">=0.0.1 <1.0.0"
+  # 视频压缩
+  video_compress: ">=3.0.0 <4.0.0"
 
 dev_dependencies:
   flutter_test:

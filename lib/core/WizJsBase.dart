@@ -10,7 +10,10 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../wizjs_flutter_lib.dart';
 
 class WizJsBase {
   /// test
@@ -20,7 +23,16 @@ class WizJsBase {
 
   /// env
   static Future env() async {
-    return "env";
+    if (Platform.isIOS) {
+      Directory dir = await getApplicationDocumentsDirectory();
+      return dir.path + "/" + WizSdk.CHANNEL_NAME;
+    } else if (Platform.isAndroid) {
+      final externalDirs = await getExternalStorageDirectories();
+      final externalPath = externalDirs?.first.path ?? "/";
+      return externalPath + "/" + WizSdk.CHANNEL_NAME;
+    } else {
+      throw UnsupportedError("other Platform");
+    }
   }
 
   /// getSystemInfo
