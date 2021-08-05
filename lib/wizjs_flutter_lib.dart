@@ -15,6 +15,8 @@ import 'core/WizJsUi.dart';
 import 'core/WizJsNetwork.dart';
 import 'core/WizJsStorage.dart';
 import 'core/WizJsMedia.dart';
+import 'core/WizJsLocation.dart';
+import 'core/WizJsFile.dart';
 
 /// A Calculator.
 class Calculator {
@@ -34,6 +36,7 @@ class WizSdk {
   final JSCallback? userTokenCallback;
   final JSCallback? stopPullDownRefreshCallback;
   final JSCallback? startPullDownRefreshCallback;
+  final JSCallback? locationCallback;
 
   WizSdk(
     this.context,
@@ -41,6 +44,7 @@ class WizSdk {
     this.userTokenCallback,
     this.stopPullDownRefreshCallback,
     this.startPullDownRefreshCallback,
+    this.locationCallback,
   });
 
   JavascriptChannel channel() {
@@ -89,7 +93,7 @@ class WizSdk {
           return this.stopPullDownRefreshCallback?.call(context, {});
         case "startPullDownRefresh":
           if (this.stopPullDownRefreshCallback == null)
-            throw UnsupportedError("startPullDownRefresh");
+            throw UnsupportedError("stopPullDownRefreshCallback");
           return this.startPullDownRefreshCallback?.call(context, {});
 
         /// WizJsNetwork
@@ -155,7 +159,21 @@ class WizSdk {
         case "chooseVideo":
           return WizJsMedia.chooseVideo(req);
 
-        ///
+        /// WizJsLocation
+        case "getLocation":
+          if (this.locationCallback == null)
+            throw UnsupportedError("locationCallback");
+          return this.locationCallback?.call(context, req);
+
+        /// WizJsFile
+        case "removeSavedFile":
+          return WizJsFile.removeSavedFile(req);
+        case "openDocument":
+          return WizJsFile.openDocument(req);
+        case "getFileInfo":
+          return WizJsFile.getFileInfo(req);
+        case "unzip":
+          return WizJsFile.unzip(req);
 
         default:
           throw UnsupportedError("$api");
