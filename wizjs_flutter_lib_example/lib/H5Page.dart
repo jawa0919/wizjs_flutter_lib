@@ -1,11 +1,12 @@
 /*
- * @FilePath     : /wizjs_flutter_lib/wizjs_flutter_lib_example/lib/H5Page.dart
+ * @FilePath     : /wizjs_flutter_lib_example/lib/H5Page.dart
  * @Date         : 2021-07-20 10:21:22
  * @Author       : jawa0919 <jawa0919@163.com>
  * @Description  : H5Page
  */
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -20,7 +21,7 @@ class H5Page extends StatefulWidget {
 
   H5Page({
     Key? key,
-    this.url = "http://192.168.205.202:9876/",
+    this.url = "http://192.168.1.14:9876/",
     this.title = "",
     this.createdCallback,
   }) : super(key: key);
@@ -43,7 +44,7 @@ class _H5PageState extends State<H5Page> {
 
   final Completer<WebViewController> _ctrl = Completer<WebViewController>();
 
-  String _userAgent = "";
+  String? _userAgent;
   bool _isLoading = true;
 
   late WizSdk sdk;
@@ -107,27 +108,18 @@ class _H5PageState extends State<H5Page> {
     );
   }
 
-  void _onWebViewCreated(BuildContext context, WebViewController ctrl) {
+  _onWebViewCreated(BuildContext context, WebViewController ctrl) async {
+    final ua = await ctrl.runJavascriptReturningResult("navigator.userAgent");
+    _userAgent = "${jsonDecode(ua)} WizAppWebView";
+    log("---------------userAgent: $_userAgent");
+    setState(() {});
     _ctrl.complete(ctrl);
-    if (_userAgent.isEmpty) {
-      final jscmd = 'ShowUA.postMessage(navigator.userAgent)';
-      ctrl.evaluateJavascript(jscmd);
-      Future.delayed(Duration(milliseconds: 100), () {
-        ctrl.evaluateJavascript(jsErudaDebug);
-      });
-    }
   }
 
   Set<JavascriptChannel> _initJsChannels(BuildContext context) {
     log('---------------_initJsChannels');
     return [
       sdk.channel(),
-      JavascriptChannel(
-        name: "ShowUA",
-        onMessageReceived: (JavascriptMessage message) {
-          _userAgent = "${message.message} WizAppWebView";
-        },
-      ),
     ].toSet();
   }
 }

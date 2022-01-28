@@ -18,9 +18,9 @@ dependencies:
     path: ../
 
   # webview插件
-  webview_flutter: ">=2.0.0 <3.0.0"
+  webview_flutter: ">=3.0.0 <4.0.0"
   # 设备信息
-  device_info_plus: ">=2.0.0 <3.0.0"
+  device_info_plus: ">=3.0.0 <4.0.0"
   # 版本信息
   package_info_plus: ">=1.0.0 <2.0.0"
   # 权限请求
